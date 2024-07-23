@@ -1,1 +1,119 @@
 
+<?php
+//echo 'Versión PHP actual: ' . phpversion();
+
+   function hacerPing($ip) {
+    $str = exec("ping -n 1 -w 1 $ip", $res, $ret);
+    if ($ret == 0) {
+        return true;
+    } 
+    return false;
+}
+
+function saveConfig(){
+
+
+
+}
+
+function PrinterLabel($peso_neto, $prod_name, $name_empresa, $box_Number, $empresa_gs1, $cod_prod_barras_prim, $digit_verific, $peso_neto2, $ip_Printer, $speed_printer, $doc_Id_prod, $Darkness, $method_print) {
+/*$filename = 'log.txt';
+$content = "";
+$file = fopen($filename, 'w');
+fwrite($file, $content);*/
+    
+// Cerrar el archivo
+/*
+Popup_method_print{1}:="THERMAL-TRANS."
+		Popup_method_print{2}:="DIRECT-THERMAL"
+*/
+$metdo_print = "D";
+if ($method_print == 1) {
+  $metdo_print = "T";
+}else if($method_print == 2){
+  $metdo_print = "D";
+}
+
+    if (strlen($doc_Id_prod) == 1) {
+
+        $id_packing="(21)000000".$doc_Id_prod.$box_Number;
+        $id_packing2="21000000".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+      }
+      if (strlen($doc_Id_prod) == 2) {
+    
+        $id_packing = "(21)00000".$doc_Id_prod.$box_Number;
+        $id_packing2 = "2100000".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+    
+      }
+      if (strlen($doc_Id_prod) == 3) {
+    
+        $id_packing = "(21)0000".$doc_Id_prod.$box_Number;
+        $id_packing2 = "210000".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+    
+      }
+      if (strlen($doc_Id_prod) == 4) {
+    
+        $id_packing = "(21)000".$doc_Id_prod.$box_Number;
+        $id_packing2 = "21000".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+    
+      }
+      if (strlen($doc_Id_prod) == 5) {
+    
+        $id_packing = "(21)00".$doc_Id_prod.$box_Number;
+        $id_packing2 = "2100".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+    
+      }
+      if (strlen($doc_Id_prod) == 6) {
+    
+        $id_packing = "(21)0".$doc_Id_prod.$box_Number;
+        $id_packing2 = "210".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+    
+      }
+      if (strlen($doc_Id_prod) == 7) {
+    
+        $id_packing = "(21)".$doc_Id_prod.$box_Number;
+        $id_packing2 = "21".$doc_Id_prod.substr($box_Number,0,1).">6".substr($box_Number,1,strlen($box_Number));
+      }
+
+//$prod_name = "Snapper Wh Yellowtail 1-2 GS/Off";
+$print_data ='CT~~CD,~CC^~CT~^XA~TA000~JSN^LT0^MNW^MTD^PON^PMN^LH0,0^JMA^PR'.$speed_printer.',7~SD8^JUS^LRN^CI0^XZ^XA^MMT^PW799^LL1199^LS0^FO458,104^GFA,01024,01024,00008,:Z64:eJytkj0KwkAQhSdGTRDRpBASSNQjeAALj2BhsLETtBMPYGFp5UE8hOANPEKOENDCwj/YeSOs7AYLX/OxzO8Oj+hb6eOs2HsVinE8UIyi35h01oqtS67onUb6ADzdG9ObMZt1ZuIxI9dMibePqL/q7QPHnO91mY7k53gXiCfm+dLvX5K7Ng4Y7PC9yMVCmE/D8nB3t9X62eSEqHsx04wZUTl9sJPJ3vrbJsmjPekLu2aGU9Q90X+CeKW8jlqouyO9b94nDAPsxYZLs7GiD7/ZfCZMxT/wW+3+NSDAWuLnDbO5YCZz9LNxyfRXqNuY/yH63Bf/pypou1ep3iFSME8=:CE81^FO608,904^GFA,01280,01280,00008,:Z64:eJzdkjEKwkAQRTcbiVZRCyGFoJVFCpMyiBovYe8ttEzpMVKKRQ5gIRZi5SE8gVhaiBHy/wY2JGJjodM8JvMz/zOsEH9aYXrJ2JmDQpL1A2hTuHo/nrRn2r6qMjlu3kHnDLaOoH+qoJpfqb9xYazvl4M+9jPHKIHAt0Q55du4HxT8hAE/4YHGk+0GHFM9ItX9xK7wIT8wuY+08ZTygPQi2qt7DGM9j8rH+vb9XRd+4XOBfqv7S7Z1/C9t5LCcLujbpKWzBcoANJ0a9qS8syHKq7GOkCe9MQ8D8//8AVvldBMwfLCPCwZS19vXS8becpExqHp3yuc36gU7dEVS:C28D^FO215,936^GFA,00512,00512,00004,:Z64:eJy1kDEOgkAQRf+wiVJwAEt6E89gwUE4BZZMrDyGNQU15R5lexNCZwd+WGJc2cTKTV5mM/P/nwXg10nIbkPStDDTuNTY3PtAjQMKy5uSMylXABk47xzMoYRJSearsCYt+5NlfviaOU8uLpLHnljO2S8+9FeF2bOfuXf+sq/jnoH+3OvSm6Jm9rG5Q5hrmBmgzH/yO066GkhNHgpRu8y/9TLrR928P/4/cl/7nr6K/nD/v84LcZ0/vg==:CA9A ^FO180,72^GFA,00768,00768,00008,:Z64:eJxjYBjBgAVK2zeAKcb6CxD6QQGEdogA00wMHGCanUEGTLMx8OClYeqZoeoZGjiwWs/+/x+E0dGBVZ411AWq7gwKH8P9UGMY70NoZkmIf9glDkDchYuWhNBM0hD1zPJYnYHkXqj61Q1QC6E0A4w+gJ2GqmP/j8tkVP3M//9A1IdegbgTKo5Os8DtIR8AABq3Iho=:FC9F^FO578,104^GFA,00768,00768,00008,:Z64:eJxjYIADxgZmVLqrG0L//w+hFymjyDM0MDGgAgUobQChYPqulkL1GWCnYephIN4BQtcfgNDXCiB0G1Q9ThpiP+PxBIj69gaox1CNZwwNgPrrAwofw/0YdAJUH9RdDAdQxHHpZwwsgOp7ALXPgYGqQABKS0AoRgmI+Yw/oO6ShdLSD6DqaiH0jGSIuspECF8epr4Eqi4Paj5UHu5PB8rdPFgAAFW6J+U=:5E5B^FO190,30^GFA,00768,00768,00012,:Z64:eJztzbERgCAQRFEcAkJLoBRK09LoBEsgNGD4DgacygVmJm70ov3GfDe7iV0W+6I7VN2waraJHrCIHWTNHormAFUzSOziqTmOds159Ny8jw6JHlt4GLm/O771v3MHygl7DA==:62EA^FO440,30^GFA,00768,00768,00012,:Z64:eJztzbERgCAQRFEcAkJLoBRK09LoBEsgNGD4DgacygVmJm70ov3GfDe7iV0W+6I7VN2waraJHrCIHWTNHormAFUzSOziqTmOds159Ny8jw6JHlt4GLm/O771v3MHygl7DA==:62EA^FO510,89^GB137,1078,2^FS ^FO124,89^GB137,1078,2^FS^FO323,89^GB187,1078,2^FS^FT370,117^A0R,91,90^FH^FD'.$box_Number.'^FS^FT436,77^A0R,31,31^FH^FD^FS^FT538,842^A0R,71,70^FH^FD'.$peso_neto.' Lb ^FS^BY4,3,69^FT350,574^A0R,22,21^FH^FD(01)9'.$empresa_gs1.$cod_prod_barras_prim.$digit_verific."(3202)".$peso_neto2.$id_packing.'^FS^BY2,3,96^FT380,544^BCR,,N,N^FD>;>8019'.$empresa_gs1.$cod_prod_barras_prim.$digit_verific."3202".$peso_neto2. $id_packing2 .'^FS^FT144,811^A0R,51,43^FB335,1,0,R^FH^FD^FS^FT144,117^A0R,51,50^FH^FD^FS^FT701,211^A0R,51,50^FB980,1,0,C^FH^FD'.$prod_name.'^FS^FS^FT537,120^A0R,51,50^FH^FD'.$cod_prod_barras_prim.'^FS^FS^FT47,91^A0R,31,31^FH^FD'.$name_empresa.'^FS^FT47,466^A0R,31,31^FB688,1,0,R^FH^FD^FS^PQ1,0,1,Y^FO692,110^GFA,1056,1056,8,:Z64:eJx107FOwzAQBuCLIjUMUbNmwn2EjgxI4VH8CGVHJBJr1SfgQRiz8Rr3Bri/9CXVFvXyKfbn4zk7wJCNcWR7h6X8LykfHag8D00YcaZu0RPfJA9GrxI3kNa6Eldd5gx3k9pMaPJzVzv/FPanxk3F+MoE1PnxpfAgpD0xx8w3DAD8w3/C6voNhgl7tYQVL2Dmsj0Za25"+"Nq8FxNKnm1gOGGhPebJc9gwoT8LP3X+tkaKXN1Z6S8A6u9uulGWW8arbuRuj2ZbTKObhDnmP87teWZzRn53aKFezlHNeZ3bap/NK6O1qTG/C5djDMbLjWei0GlmLBIpoNctNEDnveSl6lFfJ3uV3Qr58JUSn7GfbhwgCO0cA8fcL/q1OfYlzso5ypW73rPytOVRzPhO4tO3vtR471blP3EfmJftJg2RW+DPnxyboCzVV926iPlo4Xrfzznk"+"oM29+J/zeywn199bB9/:6733^XZ'; 
+ 
+//Explicacion de el codigo
+//~SD20  El constranste puede ser de 0  a 30   
+//^PR2   La velocidad de Impresion son de   2 - 3 - 4 - 6 - 8 - 10 - 12
+//^MTT   El método de Impresion ^MTT Trans. Terminca para  ^MTD Térmica Directa
+//^JUS   Esto es para poner por predeterminado    
+
+if (hacerPing($ip_Printer) === true) {
+    $valor = 'ON';
+    //fwrite($file, $print_data);
+
+    $fp=pfsockopen($ip_Printer,9100);
+
+    $zplCommands = "";
+     $zplCommands = <<<EOD
+    ^XA
+    ~SD$Darkness
+    ^PR$speed_printer 
+    ^MT$metdo_print     
+    ^JUS       
+    ^XZ
+    EOD; 
+
+    fwrite($fp, $zplCommands);
+    //fwrite($file, $print_data);
+
+    fputs($fp,$print_data);
+    fclose($fp);
+
+} else {
+    $valor = 'OFF';
+    //fwrite($file, $valor);
+}
+
+return $valor;//$p1 . ' '. $p2;
+}
+
+//fclose($file);
+
+?>
